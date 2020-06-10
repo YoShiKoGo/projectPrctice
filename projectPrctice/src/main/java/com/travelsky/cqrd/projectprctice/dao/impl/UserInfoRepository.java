@@ -154,7 +154,8 @@ public class UserInfoRepository implements UserInfoDao {
 
     @Override
     public List<UserInfo> findAll() {
-        return mongoTemplate.findAll(UserInfo.class);
+        Query query = Query.query(Criteria.where("isEnable").is(true));
+        return mongoTemplate.find(query, UserInfo.class);
     }
 
 }

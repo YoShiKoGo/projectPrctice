@@ -56,4 +56,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     public List<UserInfo> findAll() {
         return userInfoDao.findAll();
     }
+
+    @Override
+    public UserInfo findById(String id) {
+        return userInfoDao.findUserInfoById(id);
+    }
 }

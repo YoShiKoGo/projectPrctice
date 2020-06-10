@@ -53,4 +53,11 @@ public interface UserInfoService {
      * @return
      */
     List<UserInfo> findAll();
+
+    /**
+     * 根据id查询
+     * @param id
+     * @return
+     */
+    UserInfo findById(String id);
 }

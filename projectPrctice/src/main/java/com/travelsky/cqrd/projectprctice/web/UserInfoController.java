@@ -1,6 +1,7 @@
 package com.travelsky.cqrd.projectprctice.web;
 
 import com.travelsky.cqrd.projectprctice.entity.UserInfo;
+import com.travelsky.cqrd.projectprctice.form.AddForm;
 import com.travelsky.cqrd.projectprctice.form.UpdateForm;
 import com.travelsky.cqrd.projectprctice.services.UserInfoService;
 import com.travelsky.cqrd.projectprctice.vo.UserInfoPageVo;
@@ -64,9 +65,16 @@ public class UserInfoController {
      */
     @RequestMapping("/update")
     public boolean updateUserInfo(UpdateForm updateForm){
-        System.out.println(updateForm.getId());
-        return false;
-//        return userInfoService.UpdateById(userInfo);
+        //判断当前
+        System.out.println(updateForm);
+        //查询当前修改的用户
+        UserInfo userInfo = userInfoService.findById(updateForm.getId());
+        //修改用户
+        userInfo.setUserName(updateForm.getUserName());
+        userInfo.setAirlineCode(updateForm.getAirlineCode());
+
+//        return false;
+        return userInfoService.UpdateById(userInfo);
     }
 
 
@@ -78,6 +86,13 @@ public class UserInfoController {
     @RequestMapping("/delete")
     public boolean deleteUserInfo(String id){
         return userInfoService.deleteById(id);
+    }
+
+    @RequestMapping("/getByUsername")
+    public UserInfo getByUsername(AddForm addForm){
+        System.out.println(addForm);
+        //查询
+        return null;
     }
 
 }
