@@ -66,7 +66,6 @@ public class UserInfoController {
     @RequestMapping("/update")
     public boolean updateUserInfo(UpdateForm updateForm){
         //判断当前
-        System.out.println(updateForm);
         //查询当前修改的用户
         UserInfo userInfo = userInfoService.findById(updateForm.getId());
         //修改用户
@@ -90,9 +89,9 @@ public class UserInfoController {
 
     @RequestMapping("/getByUsername")
     public UserInfo getByUsername(AddForm addForm){
-        System.out.println(addForm);
         //查询
-        return null;
+        UserInfo userInfo = userInfoService.selectByUsername(addForm.getUserName());
+        return userInfo;
     }
 
 }

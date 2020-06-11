@@ -119,7 +119,14 @@ public class UserInfoRepository implements UserInfoDao {
      */
     @Override
     public boolean updateUserInfo(UserInfo userInfo) {
-        mongoTemplate.save(userInfo);
+        Query query = Query.query(Criteria.where("_id").is(userInfo.getKey()));
+        Update update = new Update();
+        update.set("userName", userInfo.getUserName());
+        update.set("airlineCode", userInfo.getAirlineCode());
+        UpdateResult updateResult = mongoTemplate.updateFirst(query, update, UserInfo.class);
+        if(updateResult.getModifiedCount() <= 0){
+            return false;
+        }
         return true;
     }
 

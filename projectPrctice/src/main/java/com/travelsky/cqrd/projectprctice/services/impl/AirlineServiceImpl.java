@@ -2,9 +2,12 @@ package com.travelsky.cqrd.projectprctice.services.impl;
 
 
 import com.travelsky.cqrd.projectprctice.dao.AirlineDao;
+import com.travelsky.cqrd.projectprctice.entity.Airline;
 import com.travelsky.cqrd.projectprctice.services.AirlineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author jytian
@@ -26,5 +29,14 @@ public class AirlineServiceImpl implements AirlineService {
     @Override
     public boolean deleteAirline(String code) {
         return airlineDao.deleteAirline(code);
+    }
+
+    /**
+     * 查询所有平台
+     * @return
+     */
+    @Override
+    public List<Airline> findAllAirline() {
+        return airlineDao.findAllAirline();
     }
 }

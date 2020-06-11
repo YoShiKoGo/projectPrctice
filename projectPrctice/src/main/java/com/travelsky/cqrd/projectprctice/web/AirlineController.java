@@ -1,9 +1,13 @@
 package com.travelsky.cqrd.projectprctice.web;
 
+import com.travelsky.cqrd.projectprctice.entity.Airline;
 import com.travelsky.cqrd.projectprctice.services.AirlineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author jytian
@@ -13,9 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/airline")
+@CrossOrigin
 public class AirlineController {
     @Autowired
     private AirlineService airlineService;
+
+    @RequestMapping("/findAll")
+    public List<Airline> findAllAirline(){
+        return airlineService.findAllAirline();
+    }
 
     /**
      * 删除平台

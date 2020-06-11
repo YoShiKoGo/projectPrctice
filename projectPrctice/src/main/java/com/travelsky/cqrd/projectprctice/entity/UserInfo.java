@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
 
@@ -20,8 +21,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Document(collection = "userInfo")
 public class UserInfo {
-    @Id
-    private String id;
+//    @Id
+    @Field("_id")
+    private String key;
     private String userName;
     private String userPsw;
     private LocalDateTime loginTime;

@@ -1,5 +1,9 @@
 package com.travelsky.cqrd.projectprctice.dao;
 
+import com.travelsky.cqrd.projectprctice.entity.Airline;
+
+import java.util.List;
+
 /**
  * @author jytian
  * @version 1.0
@@ -13,4 +17,10 @@ public interface AirlineDao {
      * @return
      */
     public boolean deleteAirline(String code);
+
+    /**
+     * 查询所有平台
+     * @return
+     */
+    public List<Airline> findAllAirline();
 }

@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author jytian
  * @version 1.0
@@ -37,5 +39,14 @@ public class AirlineRepository implements AirlineDao {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 查询所有平台
+     * @return
+     */
+    @Override
+    public List<Airline> findAllAirline() {
+        return mongoTemplate.findAll(Airline.class);
     }
 }
