@@ -61,4 +61,14 @@ public class UserInfoServiceImpl implements UserInfoService {
     public UserInfo findById(String id) {
         return userInfoDao.findUserInfoById(id);
     }
+
+    @Override
+    public List<UserInfo> findLikeUserName(String userName) {
+        return userInfoDao.findLikeUserName(userName);
+    }
+
+    @Override
+    public boolean addUserInfo(UserInfo userInfo) {
+        return userInfoDao.addUserInfo(userInfo);
+    }
 }

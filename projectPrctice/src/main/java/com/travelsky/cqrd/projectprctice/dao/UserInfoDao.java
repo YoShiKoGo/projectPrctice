@@ -39,5 +39,13 @@ public interface UserInfoDao {
      * 查询所有
      */
     public List<UserInfo> findAll();
+    /**
+     * 模糊查询
+     */
+    public List<UserInfo> findLikeUserName(String userName);
+    /**
+     * 新增用户
+     */
+    public boolean addUserInfo(UserInfo userInfo);
 
 }

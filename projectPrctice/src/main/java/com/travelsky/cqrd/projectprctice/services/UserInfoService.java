@@ -60,4 +60,18 @@ public interface UserInfoService {
      * @return
      */
     UserInfo findById(String id);
+
+    /**
+     * 根据名字模糊查询
+     * @param userName
+     * @return
+     */
+    List<UserInfo> findLikeUserName(String userName);
+
+    /**
+     * 增加用户
+     * @param userInfo
+     * @return
+     */
+    boolean addUserInfo(UserInfo userInfo);
 }

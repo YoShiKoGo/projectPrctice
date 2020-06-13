@@ -47,6 +47,7 @@ public class AirlineRepository implements AirlineDao {
      */
     @Override
     public List<Airline> findAllAirline() {
-        return mongoTemplate.findAll(Airline.class);
+
+        return mongoTemplate.find(Query.query(Criteria.where("isEnable").is(true)), Airline.class);
     }
 }

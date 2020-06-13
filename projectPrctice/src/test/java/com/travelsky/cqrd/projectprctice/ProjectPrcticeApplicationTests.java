@@ -29,5 +29,19 @@ class ProjectPrcticeApplicationTests {
 
 
     }
+    @Test
+    void testLike(){
+        System.out.println(mongoTemplate.find(Query.query(Criteria.where("userName").regex("ad")),
+                UserInfo.class));
+    }
+
+    @Test
+    void testSave(){
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserName("aaaaa");
+        userInfo.setUserPsw("123456");
+        userInfo.setAirlineCode("AC");
+        mongoTemplate.save(userInfo);
+    }
 
 }

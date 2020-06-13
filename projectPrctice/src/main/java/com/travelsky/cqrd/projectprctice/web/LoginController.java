@@ -3,6 +3,7 @@ package com.travelsky.cqrd.projectprctice.web;
 import com.travelsky.cqrd.projectprctice.entity.UserInfo;
 import com.travelsky.cqrd.projectprctice.form.LoginForm;
 import com.travelsky.cqrd.projectprctice.services.UserInfoService;
+import com.travelsky.cqrd.projectprctice.utils.IpUtil;
 import com.travelsky.cqrd.projectprctice.vo.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,8 +36,11 @@ public class LoginController {
             responseResult.setStats(true);
             //用uuid生成token
             UUID uuid = UUID.randomUUID();
-            request.setAttribute("LoginToken", "uuid");
+            request.setAttribute("LoginToken", uuid);
             //将token存放在redis中
+            //获取用户Ip
+            String ipAddr = IpUtil.getIpAddr(request);
+            System.out.println(ipAddr);
         }else {
             responseResult.setStats(false);
         }

@@ -165,4 +165,20 @@ public class UserInfoRepository implements UserInfoDao {
         return mongoTemplate.find(query, UserInfo.class);
     }
 
+    /**
+     *
+     * @param userName
+     * @return
+     */
+    @Override
+    public List<UserInfo> findLikeUserName(String userName) {
+        return mongoTemplate.find(Query.query(Criteria.where("userName").regex(userName)),
+                UserInfo.class);
+    }
+
+    @Override
+    public boolean addUserInfo(UserInfo userInfo) {
+        UserInfo save = mongoTemplate.save(userInfo);
+        return true;
+    }
 }

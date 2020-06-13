@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author jytian
@@ -28,7 +30,7 @@ public class UserInfoController {
     private UserInfoService userInfoService;
 
     @RequestMapping("/getAll")
-    public List<UserInfo> findAll(){
+    public List<UserInfo> findAll(HttpServletRequest request){
         return userInfoService.findAll();
     }
 
@@ -94,4 +96,20 @@ public class UserInfoController {
         return userInfo;
     }
 
+    @RequestMapping("/getUsernameLike")
+    public List<UserInfo> getUsernameLike(AddForm addForm){
+        //查询
+        return userInfoService.findLikeUserName(addForm.getUserName());
+    }
+
+    @RequestMapping("/addUserInfo")
+    public boolean addUserInfo(AddForm addForm){
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserPsw(addForm.getPass());
+        userInfo.setAirlineCode(addForm.getAirlineCode());
+        userInfo.setUserName(addForm.getUserName());
+        userInfo.setEnable(true);
+        System.out.println(userInfo);
+        return userInfoService.addUserInfo(userInfo);
+    }
 }
