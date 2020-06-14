@@ -4,6 +4,7 @@ import com.mongodb.client.result.UpdateResult;
 import com.travelsky.cqrd.projectprctice.dao.UserInfoDao;
 import com.travelsky.cqrd.projectprctice.entity.UserInfo;
 import com.travelsky.cqrd.projectprctice.vo.UserInfoPageVo;
+import jdk.nashorn.internal.objects.annotations.Where;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -13,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -177,8 +179,43 @@ public class UserInfoRepository implements UserInfoDao {
     }
 
     @Override
-    public boolean addUserInfo(UserInfo userInfo) {
-        UserInfo save = mongoTemplate.save(userInfo);
+    public UserInfo addUserInfo(UserInfo userInfo) {
+        UserInfo save = mongoTemplate.insert(userInfo);
+        return save;
+    }
+
+    @Override
+    public boolean updateUserInfoIp(String id, String ip) {
+        Query query = Query.query(Criteria.where("_id").is(id));
+        Update update = new Update().set("ip", ip);
+        update.set("loginTime", LocalDateTime.now());
+        UpdateResult updateResult = mongoTemplate.updateMulti(query, update, UserInfo.class);
+        //是否修改成功
+        if(updateResult.getModifiedCount() <= 0){
+            return false;
+        }
         return true;
+    }
+
+    @Override
+    public List<UserInfo> findByAdmin(String airline, String username) {
+        //根据平台查询可用的用户
+        Criteria criteria = new Criteria().andOperator(
+                Criteria.where("isEnable").is(true),
+                Criteria.where("airlineCode").is(airline));
+        if(username.isEmpty()){
+            return mongoTemplate.find(Query.query(criteria), UserInfo.class);
+        }else {
+            Criteria username1 = new Criteria().where("userName").is(username);
+            Criteria c = new Criteria().andOperator(criteria, username1);
+            return mongoTemplate.find(Query.query(c), UserInfo.class);
+        }
+    }
+
+    @Override
+    public List<UserInfo> findByAdminLike(String username, String airline) {
+        Criteria criteria = new Criteria().andOperator(Criteria.where("userName").regex(username),
+                                                        Criteria.where("airlineCode").is(airline));
+        return mongoTemplate.find(Query.query(criteria), UserInfo.class);
     }
 }

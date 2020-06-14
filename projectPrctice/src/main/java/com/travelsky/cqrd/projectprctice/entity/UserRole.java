@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+
 /**
  * @author jytian
  * @version 1.0
@@ -16,8 +18,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = "userRole")
-public class UserRole {
+public class UserRole implements Serializable {
     private ObjectId id;
     private String userId;
     private String roleId;
+    private String airline;
 }

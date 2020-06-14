@@ -68,7 +68,22 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public boolean addUserInfo(UserInfo userInfo) {
+    public UserInfo addUserInfo(UserInfo userInfo) {
         return userInfoDao.addUserInfo(userInfo);
+    }
+
+    @Override
+    public boolean updateUserInfoIp(String id, String ip) {
+        return userInfoDao.updateUserInfoIp(id, ip);
+    }
+
+    @Override
+    public List<UserInfo> adminUserInfoList(String airline, String username) {
+        return userInfoDao.findByAdmin(airline, username);
+    }
+
+    @Override
+    public List<UserInfo> findAdminLike(String username, String airline) {
+        return userInfoDao.findByAdminLike(username, airline);
     }
 }

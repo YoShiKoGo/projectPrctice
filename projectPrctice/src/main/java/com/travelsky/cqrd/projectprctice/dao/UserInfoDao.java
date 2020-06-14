@@ -4,6 +4,7 @@ package com.travelsky.cqrd.projectprctice.dao;
 import com.travelsky.cqrd.projectprctice.entity.UserInfo;
 import com.travelsky.cqrd.projectprctice.vo.UserInfoPageVo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface UserInfoDao {
@@ -46,6 +47,17 @@ public interface UserInfoDao {
     /**
      * 新增用户
      */
-    public boolean addUserInfo(UserInfo userInfo);
-
+    public UserInfo addUserInfo(UserInfo userInfo);
+    /**
+     * 更新用户ip
+     */
+    public boolean updateUserInfoIp(String id, String ip);
+    /**
+     * admin查询
+     */
+    public List<UserInfo> findByAdmin(String airline, String username);
+    /**
+     * admin模糊查询
+     */
+    public List<UserInfo> findByAdminLike(String username, String airline);
 }

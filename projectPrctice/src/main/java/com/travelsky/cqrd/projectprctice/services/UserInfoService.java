@@ -73,5 +73,21 @@ public interface UserInfoService {
      * @param userInfo
      * @return
      */
-    boolean addUserInfo(UserInfo userInfo);
+    UserInfo addUserInfo(UserInfo userInfo);
+
+    /**
+     * 更新用户ip
+     * @param id
+     * @param ip
+     * @return
+     */
+    boolean updateUserInfoIp(String id, String ip);
+    /**
+     * admin查询
+     */
+    List<UserInfo> adminUserInfoList(String airline, String username);
+    /**
+     * admin模糊查询
+     */
+    List<UserInfo> findAdminLike(String username, String airline);
 }

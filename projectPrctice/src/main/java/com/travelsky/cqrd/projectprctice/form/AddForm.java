@@ -17,4 +17,5 @@ public class AddForm {
     private String pass;
     private String userName;
     private String airlineCode;
+    private Integer role;
 }

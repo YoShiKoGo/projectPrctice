@@ -1,8 +1,14 @@
 server:
   port: 8001
+  servlet:
+    session:
+      timeout: 1800 #30分钟
 spring:
   application:
     name: mongodb-restapi
   data:
     mongodb:
       uri: mongodb://localhost:27017/project-practice
+  redis:
+    host: 127.0.0.1
+    port: 6379
