@@ -3,6 +3,7 @@ package com.travelsky.cqrd.projectprctice.web;
 import com.travelsky.cqrd.projectprctice.entity.RoleInfo;
 import com.travelsky.cqrd.projectprctice.entity.UserInfo;
 import com.travelsky.cqrd.projectprctice.form.LoginForm;
+import com.travelsky.cqrd.projectprctice.services.LoginNumService;
 import com.travelsky.cqrd.projectprctice.services.RoleInfoService;
 import com.travelsky.cqrd.projectprctice.services.UserInfoService;
 import com.travelsky.cqrd.projectprctice.utils.AESUtil;
@@ -33,6 +34,8 @@ public class LoginController {
     @Autowired
     private RoleInfoService roleInfoService;
     @Autowired
+    private LoginNumService loginNumService;
+    @Autowired
     private RedisTemplate redisTemplate;
 
     @RequestMapping("/login")
@@ -44,11 +47,11 @@ public class LoginController {
         //加密密码
         AESUtil aesUtil = new AESUtil();
         String aesEncode = aesUtil.AESEncode(user.getPassword());
+        HttpSession session = request.getSession();
         if(aesEncode.equals(userInfo.getUserPsw()) && userInfo.isEnable() == true){
             responseResult.setStats(true);
             //用uuid生成token
             UUID uuid = UUID.randomUUID();
-            HttpSession session = request.getSession();
             session.setAttribute("LoginToken", uuid);
             //将token存放在redis中
             redisTemplate.opsForValue().set(uuid,userInfo);
@@ -56,6 +59,8 @@ public class LoginController {
             String ipAddr = IpUtil.getIpAddr(request);
             //更新数据库用户ip，更新登录时间
             userInfoService.updateUserInfoIp(userInfo.getKey(), ipAddr);
+            //在redis记录登录次数
+            loginNumService.updateLoginNum(userInfo.getUserName());
 
 
         }else {
@@ -64,7 +69,32 @@ public class LoginController {
         //查询用户角色
         RoleInfo roleByUsername = roleInfoService.findRoleByUsername(userInfo.getKey());
         responseResult.setData(roleByUsername.getLevel());
+        //session中存放角色
+        session.setAttribute("role", roleByUsername.getLevel());
 
+
+        return responseResult;
+    }
+
+    @RequestMapping("/loginError")
+    public ResponseResult loginError(){
+        ResponseResult responseResult = new ResponseResult();
+        responseResult.setData(false);
+        responseResult.setMessage("未登录");
+        return responseResult;
+    }
+
+    @RequestMapping("/logOut")
+    public boolean logOut(HttpServletRequest request){
+        //移除session
+        request.getSession().removeAttribute("LoginToken");
+        return true;
+    }
+    @RequestMapping("/roleError")
+    public ResponseResult roleError(){
+        ResponseResult responseResult = new ResponseResult();
+        responseResult.setData(false);
+        responseResult.setMessage("权限不够!");
         return responseResult;
     }
 

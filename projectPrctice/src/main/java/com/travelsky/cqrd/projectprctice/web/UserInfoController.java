@@ -4,10 +4,13 @@ import com.travelsky.cqrd.projectprctice.entity.RoleInfo;
 import com.travelsky.cqrd.projectprctice.entity.UserInfo;
 import com.travelsky.cqrd.projectprctice.form.AddForm;
 import com.travelsky.cqrd.projectprctice.form.UpdateForm;
+import com.travelsky.cqrd.projectprctice.form.UserInfoForm;
 import com.travelsky.cqrd.projectprctice.services.LogService;
+import com.travelsky.cqrd.projectprctice.services.LoginNumService;
 import com.travelsky.cqrd.projectprctice.services.RoleInfoService;
 import com.travelsky.cqrd.projectprctice.services.UserInfoService;
 import com.travelsky.cqrd.projectprctice.utils.AESUtil;
+import com.travelsky.cqrd.projectprctice.vo.LoginNumVo;
 import com.travelsky.cqrd.projectprctice.vo.UserInfoPageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -39,6 +42,8 @@ public class UserInfoController {
     @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
+    private LoginNumService loginNumService;
+    @Autowired
     private LogService logService;
 
     @RequestMapping("/getAll")
@@ -47,8 +52,9 @@ public class UserInfoController {
         HttpSession session = request.getSession();
         UUID loginToken = (UUID) session.getAttribute("LoginToken");
         UserInfo userInfo = (UserInfo) redisTemplate.opsForValue().get(loginToken);
-        System.out.println(userInfo);
-        return userInfoService.findAll();
+        RoleInfo roleInfo = roleInfoService.findRoleByUsername(userInfo.getKey());
+            return userInfoService.findAll();
+
     }
 
     /**
@@ -123,14 +129,17 @@ public class UserInfoController {
 
     @RequestMapping("/addUserInfo")
     public boolean addUserInfo(AddForm addForm,HttpServletRequest request){
+        System.out.println(addForm);
         RoleInfo roleInfo = new RoleInfo();
 
         //查询公司是否已经有管理员了
-        if(roleInfoService.selectAdminRole(addForm.getAirlineCode())){
-            roleInfo.setLevel(addForm.getRole());
-        }else {
-            return false;
+        boolean b = roleInfoService.selectAdminRole(addForm.getAirlineCode());
+        roleInfo.setLevel(addForm.getRole());
+        System.out.println(b);
+        if(addForm.getRole() == 2 && b == false){
+                return false;
         }
+
 
         UserInfo userInfo = new UserInfo();
         //加密持久化密码
@@ -140,8 +149,10 @@ public class UserInfoController {
         userInfo.setAirlineCode(addForm.getAirlineCode());
         userInfo.setUserName(addForm.getUserName());
         userInfo.setEnable(true);
+        System.out.println(userInfo);
         //设置角色
         UserInfo info = userInfoService.addUserInfo(userInfo);
+
         roleInfo.setAirline(info.getAirlineCode());
 
         if(addForm.getRole() == 2){
@@ -197,10 +208,13 @@ public class UserInfoController {
     }
 
     @RequestMapping("/getCurrentUserInfo")
-    public UserInfo getCurrentUserInfo(HttpServletRequest request){
+    public UserInfoForm getCurrentUserInfo(HttpServletRequest request){
         UUID loginToken = (UUID) request.getSession().getAttribute("LoginToken");
         UserInfo userInfo = (UserInfo) redisTemplate.opsForValue().get(loginToken);
-        return userInfo;
+        //查询登录次数
+        LoginNumVo userLoginNum = loginNumService.getUserLoginNum(userInfo.getUserName());
+        UserInfoForm userInfoForm = new UserInfoForm(userInfo, userLoginNum);
+        return userInfoForm;
 
     }
 

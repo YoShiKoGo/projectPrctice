@@ -5,6 +5,7 @@ import com.travelsky.cqrd.projectprctice.dao.RoleInfoDao;
 import com.travelsky.cqrd.projectprctice.entity.UserInfo;
 import com.travelsky.cqrd.projectprctice.services.UserInfoService;
 import com.travelsky.cqrd.projectprctice.utils.AESUtil;
+import com.travelsky.cqrd.projectprctice.vo.LoginNumVo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +21,8 @@ import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
+import java.time.Month;
 
 @SpringBootTest
 class ProjectPrcticeApplicationTests {
@@ -132,6 +135,23 @@ class ProjectPrcticeApplicationTests {
 //        Criteria c = new Criteria().andOperator(criteria, username1);
 //        System.out.println(mongoTemplate.find(Query.query(c), UserInfo.class));
         System.out.println(userInfoService.adminUserInfoList("CA", "admin"));
+
+    }
+
+    @Autowired
+    RedisTemplate redisTemplate;
+
+    @Test
+    void testDate(){
+//        LocalDateTime now = LocalDateTime.now();
+//        int dayOfMonth = now.getDayOfMonth();
+//        System.out.println(dayOfMonth);
+//        int month = now.getMonthValue();
+//        System.out.println(month);
+//        LoginNumVo admin = (LoginNumVo) redisTemplate.opsForValue().get("admin");
+//        System.out.println(admin);
+        UserInfo userInfo = (UserInfo) redisTemplate.opsForValue().get("cf458b05-f262-4761-8e6e-62ac695abf54");
+        System.out.println(userInfo);
 
     }
 

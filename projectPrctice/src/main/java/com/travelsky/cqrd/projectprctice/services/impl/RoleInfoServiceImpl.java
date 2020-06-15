@@ -2,9 +2,13 @@ package com.travelsky.cqrd.projectprctice.services.impl;
 
 import com.travelsky.cqrd.projectprctice.dao.RoleInfoDao;
 import com.travelsky.cqrd.projectprctice.entity.RoleInfo;
+import com.travelsky.cqrd.projectprctice.entity.UserInfo;
 import com.travelsky.cqrd.projectprctice.services.RoleInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 /**
  * @author tjy
@@ -17,6 +21,8 @@ import org.springframework.stereotype.Service;
 public class RoleInfoServiceImpl implements RoleInfoService {
     @Autowired
     private RoleInfoDao roleInfoDao;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Override
     public RoleInfo findRoleByUsername(String userId) {
@@ -36,5 +42,12 @@ public class RoleInfoServiceImpl implements RoleInfoService {
         }else {
             return false;
         }
+    }
+
+    @Override
+    public RoleInfo filterGetRole(UUID token) {
+        UserInfo userInfo = (UserInfo) redisTemplate.opsForValue().get(token);
+        System.out.println(userInfo);
+        return null;
     }
 }
